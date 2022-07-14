@@ -16,9 +16,18 @@ function App() {
     ],
   };
   
+  const wbtcContract = new ethers.Contract(wbtc.address, wbtc.abi, provider);
+
+  async function fetchMint() {
+    const balance = await wbtcContract.balanceOf(wbtc.address);
+    console.log(balance);
+  }
+  
   return (
     
   );
 }
 
 export default App;
+
+
