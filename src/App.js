@@ -7,50 +7,33 @@ function App() {
   const [mint, setMint] = useState([]);
   const [burn, setBurn] = useState([]);
 
-  const provider = new ethers.providers.WebSocketProvider("wss://eth-mainnet.g.alchemy.com/v2/sJzaXe5o3w8nxLI19QtoP-qXT2hlvKZQ");
-  
-  const wbtc = {
-    address: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
-    abi: [
-        "event mint(address indexed _to, uint256 _amount);",
-        "event burn(address indexed burner, uint256 _value) public"
-    ],
-  };
-  
-  const wbtcContract = new ethers.Contract(wbtc.address, wbtc.abi, provider);
-  
   useEffect(() => {
+    
+    const provider = new ethers.providers.WebSocketProvider("wss://eth-mainnet.g.alchemy.com/v2/sJzaXe5o3w8nxLI19QtoP-qXT2hlvKZQ", 1);
+  
+    const wbtc = {
+      address: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      abi: [
+          "event Mint(address indexed to, uint256 amount);",
+          "event Burn(address indexed burner, uint256 value);"
+      ],
+    };
+    
+    const wbtcContract = new ethers.Contract(wbtc.address, wbtc.abi, provider);
+
     const getMint = async () => {
-      const mintEvent = await wbtcContract.queryFilter('mint', 'latest' - 1000, 'latest')
-      
-      const txHash = mintEvent.transactionHash;
-      const frAddress = mintEvent.from;
-      const blockNumber = mintEvent.blockNumber;
-      const timestamp = mintEvent.getBlockByNumber(blockNumber).timestamp;
-      
-      return setMint({
-        hash: txHash,
-        from: frAddress,
-        timestamp: timestamp,
-      })
+      const mintEvent = await wbtcContract.queryFilter('Mint', 0, 'latest')
+      const eventMint = mintEvent.slice(mintEvent.length - 21, mintEvent.length - 1)
+            
+      setMint(eventMint)
     }
     getMint()
-  }, [])
   
-  useEffect(() => {
     const getBurn = async () => {
-      const burnEvent = await wbtcContract.queryFilter('burn', 'latest' - 1000, 'latest')
-      
-      const txHash = burnEvent.transactionHash;
-      const frAddress = burnEvent.from;
-      const blockNumber = burnEvent.blockNumber;
-      const timestamp = burnEvent.getBlockByNumber(blockNumber).timestamp;
-      
-      return setBurn({
-        hash: txHash,
-        from: frAddress,
-        timestamp: timestamp,  
-      })
+      const burnEvent = await wbtcContract.queryFilter('Burn', 0, 'latest')
+      const eventBurn = burnEvent.slice(burnEvent.length - 21, burnEvent.length - 1)
+            
+      setBurn(eventBurn)
     }
     getBurn()
   }, [])
@@ -72,8 +55,13 @@ function App() {
             </thead>
             <tbody>
               <tr>
-                <td>Transaction Hash: </td>
-                <td>{mint.hash}</td>
+                <td>
+                  {mint.map((tx, index) => (
+                  <div key={index}>
+                    "Transaction Hash:" {tx.transactionHash}
+                  </div>
+                ))}
+                </td>
               </tr>
               <tr>
                 <td>From address: </td>
@@ -95,8 +83,12 @@ function App() {
             </thead>
             <tbody>
               <tr>
-                <td>Transaction Hash: </td>
-                <td>{burn.hash}</td>
+                <td> {burn.map((tx, index) => (
+                  <div key={index}>
+                    "Transaction Hash:" {tx.transactionHash}
+                  </div>
+                ))}
+              </td>
               </tr>
               <tr>
                 <td>From address: </td>
