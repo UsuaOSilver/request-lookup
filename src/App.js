@@ -60,8 +60,7 @@ function App() {
                   <div key={index}>
                     "Transaction Hash:" {tx.transactionHash}
                   </div>
-                ))}
-                </td>
+                  ))}</td>
               </tr>
               <tr>
                 <td>From address: </td>
@@ -87,8 +86,7 @@ function App() {
                   <div key={index}>
                     "Transaction Hash:" {tx.transactionHash}
                   </div>
-                ))}
-              </td>
+                ))}</td>
               </tr>
               <tr>
                 <td>From address: </td>
