@@ -1,4 +1,6 @@
 import './App.css';
+//import Timestamp from './Timestamp';
+//import FrAddress from './FrAddress'
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 
@@ -6,6 +8,8 @@ function App() {
   
   const [mint, setMint] = useState([]);
   const [burn, setBurn] = useState([]);
+  const [frAddress, setAddress] = useState([]);
+  const [timestamp, setTimestamp] = useState([]);
 
   useEffect(() => {
     
@@ -22,18 +26,41 @@ function App() {
     const wbtcContract = new ethers.Contract(wbtc.address, wbtc.abi, provider);
 
     const getMint = async () => {
-      const mintEvent = await wbtcContract.queryFilter('Mint', 0, 'latest')
-      const eventMint = mintEvent.slice(mintEvent.length - 21, mintEvent.length - 1)
-            
-      setMint(eventMint)
+      const mintFilter = await wbtcContract.queryFilter('Mint', 0, 'latest')
+      const txMint = mintFilter.slice(mintFilter.length - 21, mintFilter.length - 1)
+      console.log(txMint)
+      
+      const hash = txMint[0].transactionHash
+      console.log(hash)
+      
+      const receipt = await provider.getTransactionReceipt(hash)
+      console.log(receipt)
+      const frAddress = receipt.from
+      
+      const blockNum = await provider.getBlock(hash)
+      console.log(blockNum)
+      const timestamp = blockNum.timestamp
+      
+      return setMint ({
+        hash: hash,
+        fromAddress: frAddress,
+        time: timestamp,
+      })
     }
     getMint()
   
     const getBurn = async () => {
-      const burnEvent = await wbtcContract.queryFilter('Burn', 0, 'latest')
-      const eventBurn = burnEvent.slice(burnEvent.length - 21, burnEvent.length - 1)
+      const burnFilter = await wbtcContract.queryFilter('Burn', 0, 'latest')
+      const txBurn = burnFilter.slice(burnFilter.length - 21, burnFilter.length - 1)
+      
+      const hash = txBurn.transactionHash
+      const receipt = await provider.getTransactionReceipt(hash)
             
-      setBurn(eventBurn)
+      return setBurn({
+        hash: hash,
+        fromAddress: frAddress,
+        time: timestamp,
+      })
     }
     getBurn()
   }, [])
@@ -47,55 +74,32 @@ function App() {
         <span>
           <table>
             <thead>
-              <tr>
-                <td>
-                  latest 20 Mint events
-                </td>
-              </tr>
+              <tr><td>latest 20 Mint events</td></tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  {mint.map((tx, index) => (
-                  <div key={index}>
-                    "Transaction Hash:" {tx.transactionHash}
-                  </div>
-                  ))}</td>
-              </tr>
-              <tr>
-                <td>From address: </td>
-                <td>{mint.from}</td>
-              </tr>
-              <tr>
-                <td>Time: </td>
-                <td>{mint.timestamp}</td>
-              </tr>
+              {mint.map((tx, index) => 
+              (
+                <div classname="tx" key={index}>
+                  <tr><td>"Transaction Hash:" {tx.hash}</td></tr>
+                  <tr><td>From address: {/*<FrAddress transactionHash = {tx.hash}/>*/}</td></tr>
+                  <tr><td>Time: {/*<Timestamp />*/}</td></tr>
+                </div>
+              ))}
             </tbody>
           </table>
           <table>
             <thead>
-              <tr>
-                <td>
-                  latest 20 Burn events
-                </td>
-              </tr>
+              <tr><td>latest 20 Burn events</td></tr>
             </thead>
             <tbody>
-              <tr>
-                <td> {burn.map((tx, index) => (
-                  <div key={index}>
-                    "Transaction Hash:" {tx.transactionHash}
-                  </div>
-                ))}</td>
-              </tr>
-              <tr>
-                <td>From address: </td>
-                <td>{burn.from}</td>
-              </tr>
-              <tr>
-                <td>Time: </td>
-                <td>{burn.timestamp}</td>
-              </tr>
+              {burn.map((tx, index) => 
+              (
+                <div classname="tx" key={index}>
+                  <tr><td>"Transaction Hash:" {tx.hash}</td></tr>
+                  <tr><td>From address: {/*<FrAddress />*/}</td></tr>
+                  <tr><td>Time: {/*<Timestamp />*/}</td></tr>
+                </div>
+              ))}
             </tbody>
           </table>
         </span>

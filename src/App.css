@@ -5,3 +5,7 @@
 table {
   float: left;
 }
+
+.tx {
+  text-align: left;
+}
