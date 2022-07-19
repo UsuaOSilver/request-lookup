@@ -3,6 +3,6 @@ A web app that fetches the last 20 calls to the mint and burn methods of the ERC
 
 
 ## Tech stack:
-- ethers.js
+- Ethers.js
 - React.js
 - Glass UI
