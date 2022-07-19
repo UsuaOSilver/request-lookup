@@ -1,8 +1,8 @@
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 
-import Timestamp from './Timestamp';
-import FrAddress from './FrAddress'
+import Timestamp from './components/Timestamp';
+import FrAddress from './components/FrAddress'
 
 import './App.css';
 
@@ -39,58 +39,57 @@ function App() {
   }, [])
       
   return(
-    <div className="App">
-      <header className="App-header">
-        <h1>WBTC</h1>
-      </header>
-      {/**<div className='spinner'></div>*/}
-      <div className="container">
-        <div className="column">
-          <h2>Mint</h2>
-          <table className='card'>
-            <tbody>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Transaction Hash</th>
-              <th scope="col">From</th>
-              <th scope="col">Time</th>
-            </tr>
-            {mint.map((tx, index) => 
-            (
-              <tr className="tx" key={index}>
-                <th scope="row">{index + 1}</th>
-                <td className="ml12">{tx.transactionHash}</td>
-                <FrAddress transactionHash={tx.transactionHash} />
-                <Timestamp blockNumber={tx.blockNumber} />
+      <div className="App">
+        <header className="App-header">
+          <h1>WBTC</h1>
+        </header>
+        <div className="container">
+          <div className="column">
+            <h2>Mint</h2>
+            <table className='card'>
+              <tbody>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Transaction Hash</th>
+                <th scope="col">From</th>
+                <th scope="col">Time</th>
               </tr>
-            ))}
-          </tbody>
-          </table>
-        </div>
-        <div className="column">
-          <h2>Burn</h2>
-          <table className='card'>
-          <tbody>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Transaction Hash</th>
-              <th scope="col">From</th>
-              <th scope="col">Time</th>
-            </tr>
-            {burn.map((tx, index) => 
-            (
-              <tr className="tx" key={index}>
-                <th scope="row">{index + 1}</th>
-                <td className="ml12">{tx.transactionHash}</td>
-                <FrAddress transactionHash={tx.transactionHash} />
-                <Timestamp blockNumber={tx.blockNumber} />
+              {mint.map((tx, index) => 
+              (
+                <tr className="tx" key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td className="ml12">{tx.transactionHash}</td>
+                  <FrAddress transactionHash={tx.transactionHash} />
+                  <Timestamp blockNumber={tx.blockNumber} />
                 </tr>
-            ))}
-          </tbody>
-          </table>
+              ))}
+            </tbody>
+            </table>
+          </div>
+          <div className="column">
+            <h2>Burn</h2>
+            <table className='card'>
+            <tbody>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Transaction Hash</th>
+                <th scope="col">From</th>
+                <th scope="col">Time</th>
+              </tr>
+              {burn.map((tx, index) => 
+              (
+                <tr className="tx" key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td className="ml12">{tx.transactionHash}</td>
+                  <FrAddress transactionHash={tx.transactionHash} />
+                  <Timestamp blockNumber={tx.blockNumber} />
+                  </tr>
+              ))}
+            </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    </div>
+      </div>      
   );
 }
 
