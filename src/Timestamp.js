@@ -1,24 +1,24 @@
-/**import { ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
+import './App.css';
 
-export default function Timestamp() {
+export default function Timestamp({blockNumber}) {
     
-    const [timestamp, setTimestamp] = useState([]);
+    const [timestamp, setTimestamp] = useState(null);
     
     useEffect(() => {
         const provider = new ethers.providers.WebSocketProvider("wss://eth-mainnet.g.alchemy.com/v2/sJzaXe5o3w8nxLI19QtoP-qXT2hlvKZQ", 1);
-        const wbtc = {
-            address: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
-            abi: [
-                "event Mint(address indexed to, uint256 amount);",
-                "event Burn(address indexed burner, uint256 value);"
-            ],
-        };
-        const wbtcContract = new ethers.Contract(wbtc.address, wbtc.abi, provider);
         
         const getTimestamp = async () => {
-            
+            const block = await provider.getBlock(blockNumber)
+            const timestamp = block.timestamp
+            setTimestamp(timestamp)
         }
         getTimestamp()
+        // eslint-disable-next-line 
     }, []);
-}*/
+    
+    return (
+        <td className="ml12">{timestamp}</td>
+    )
+}
