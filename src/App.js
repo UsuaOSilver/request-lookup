@@ -1,8 +1,11 @@
-import './App.css';
-import Timestamp from './Timestamp';
-import FrAddress from './FrAddress'
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
+
+import Timestamp from './Timestamp';
+import FrAddress from './FrAddress'
+
+import './App.css';
+
 
 function App() {
   
@@ -42,9 +45,10 @@ function App() {
       </header>
       {/**<div className='spinner'></div>*/}
       <div className="container">
-        <div class="column">
+        <div className="column">
           <h2>Mint</h2>
           <table className='card'>
+            <tbody>
             <tr>
               <th scope="col">#</th>
               <th scope="col">Transaction Hash</th>
@@ -57,14 +61,16 @@ function App() {
                 <th scope="row">{index + 1}</th>
                 <td className="ml12">{tx.transactionHash}</td>
                 <FrAddress transactionHash={tx.transactionHash} />
-                <Timestamp transactionHash={tx.blockNumber} />
+                <Timestamp blockNumber={tx.blockNumber} />
               </tr>
             ))}
+          </tbody>
           </table>
         </div>
-        <div class="column">
+        <div className="column">
           <h2>Burn</h2>
           <table className='card'>
+          <tbody>
             <tr>
               <th scope="col">#</th>
               <th scope="col">Transaction Hash</th>
@@ -77,9 +83,10 @@ function App() {
                 <th scope="row">{index + 1}</th>
                 <td className="ml12">{tx.transactionHash}</td>
                 <FrAddress transactionHash={tx.transactionHash} />
-                <Timestamp transactionHash={tx.blockNumber} />
+                <Timestamp blockNumber={tx.blockNumber} />
                 </tr>
             ))}
+          </tbody>
           </table>
         </div>
       </div>

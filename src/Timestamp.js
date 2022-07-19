@@ -15,7 +15,7 @@ export default function Timestamp({blockNumber}) {
             setTimestamp(timestamp)
         }
         getTimestamp()
-        // eslint-disable-next-line 
+    // eslint-disable-next-line 
     }, []);
     
     return (
