@@ -1,10 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-  <script>
-    $(window).on("load", function(){
-      $(".loader-wrapper").fadeOut('slow');
-    });
-  </script>
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
@@ -19,4 +14,13 @@
   <div class='loader-wrapper'>
     <span class="loader"><span class="loader-inner"></span></span>
   </div>
+  
+  <script type="module">
+    import dayjs from 'https://cdn.skypack.dev/dayjs';
+  </script>
+  <script>
+    $(window).on("load", function(){
+      $(".loader-wrapper").fadeOut('slow');
+    });
+  </script>
 </html>
