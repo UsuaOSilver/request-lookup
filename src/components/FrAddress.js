@@ -11,6 +11,7 @@ export default function FrAddress({transactionHash}) {
         const getFrAddress = async () => {
             const receipt = await provider.getTransactionReceipt(transactionHash)
             const frAddress = receipt.from
+            console.log(frAddress)
             setAddress(frAddress)
         }
         getFrAddress()
